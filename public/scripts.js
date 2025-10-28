@@ -8,23 +8,23 @@ const chatWindow = document.getElementById('chat-window');
 function getPokemonID(name) {
   let hash = 0;
   for (let i = 0; i < name.length; i++) {
-    hash = (hash + name.charCodeAt(i)) % 898; 
+    hash = (hash + name.charCodeAt(i)) % 898;
   }
   return hash === 0 ? 1 : hash;
 }
 
 function appendMessage(data) {
   const messageDiv = document.createElement('div');
-  messageDiv.classList.add('message');
+  messageDiv.classList.add('d-flex', 'align-items-start', 'mb-2');
 
   const pokeID = getPokemonID(data.handle);
   const pokeImg = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokeID}.png`;
 
   messageDiv.innerHTML = `
-    <img src="${pokeImg}" alt="${data.handle}">
-    <div class="message-content">
-      <div class="username">${data.handle}</div>
-      <div class="text">${data.message}</div>
+    <img src="${pokeImg}" alt="${data.handle}" width="40" height="40" class="me-2">
+    <div class="message-content p-2 rounded bg-light border" style="max-width: 80%;">
+      <div class="fw-bold text-primary">${data.handle}</div>
+      <div>${data.message}</div>
     </div>
   `;
 
@@ -34,7 +34,7 @@ function appendMessage(data) {
 
 function appendSystemMessage(text) {
   const sysDiv = document.createElement('div');
-  sysDiv.classList.add('system-message');
+  sysDiv.classList.add('text-center', 'text-secondary', 'fst-italic', 'my-1');
   sysDiv.textContent = text;
   chatWindow.appendChild(sysDiv);
   chatWindow.scrollTop = chatWindow.scrollHeight;
@@ -45,11 +45,12 @@ sendBtn.addEventListener('click', () => {
   const message = messageInput.value.trim();
 
   if (!handle || !message) return;
+
+  console.log("Sending message:", handle, message);
   socket.emit('chatMessage', { handle, message });
   messageInput.value = '';
 });
 
-// 接收消息
 socket.on('chatMessage', data => {
   appendMessage(data);
 });
