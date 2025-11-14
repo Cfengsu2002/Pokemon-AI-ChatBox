@@ -1,4 +1,4 @@
-const socket = io('https://funest-efrain-uncommonly.ngrok-free.dev');
+const socket = io("http://localhost:4000");
 
 const handleInput = document.getElementById('handle');
 const messageInput = document.getElementById('message');
